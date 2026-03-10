@@ -157,6 +157,11 @@
 <header>
   <button id="mobileToggle">☰ Songs</button>
   Ukuelectics BayShire Gig 🎵🎶
+  <label class="autoplay-toggle">
+  <input type="checkbox" id="autoplayToggle">
+  <span>Autoplay</span>
+</label>
+
 </header>
 
 <!-- Mobile slide-down panel -->
@@ -189,7 +194,7 @@
 </footer>
 
 <script>
-  const songs = [
+  const SongInfos = [
     { name: "Bring Me Sunshine", youtube: "https://www.youtube.com/watch?v=Dnahzdotjiw", bpm: 81, resource: "bring-me-sunshine" },
     { name: "Fly Me To The Moon", youtube: "https://www.youtube.com/watch?v=JYuyWrkwpok", bpm: 119, resource: "fly-me-to-the-moon" },
     { name: "Hit The Road Jack", youtube: "https://www.youtube.com/watch?v=uSiHqxgE2d0", bpm: 173, resource: "hit-the-road-jack" },
@@ -209,6 +214,30 @@
 	{ name: "Sweet Caroline", youtube: "https://www.youtube.com/watch?v=4F_RCWVoL4s", bpm: 100, resource: "sweet-caroline" },
 	{ name: "Dream a Little Dream", youtube: "https://www.youtube.com/watch?v=P4T3tMkjRig", bpm: 100, resource: "dream-a-little-dream" }
   ];
+
+ const BayShireSetList = [
+  "dream-a-little-dream",
+  "fly-me-to-the-moon",
+  "harvest-moon",
+  "hit-the-road-jack",
+  "It-had-to-be-you",
+  "love",
+//  "route-66",
+  "something-stupid",
+  "sweet-caroline",
+  "sweet-pea",
+  "thats-amore",
+	"tonight-you-belong",
+  "ukulele-lady",
+//  "walking-after-midnight",
+  "will-you-still-love-me-tomorrow"
+];
+
+// Build the new ordered list
+const songs = BayShireSetList.map(resourceName =>
+  SongInfos.find(song => song.resource.toLowerCase() === resourceName.toLowerCase())
+);
+console.log(songs);
 
   const pdfFrame = document.getElementById("pdfFrame");
   const nowPlayingEl = document.getElementById("nowPlaying");
@@ -282,7 +311,7 @@ mobileToggle.onclick = () => {
       el.classList.toggle("active", i === index)
     );
 
-    pdfFrame.src = `resources/${s.resource}.pdf#toolbar=0&zoom=80`;
+    pdfFrame.src = `resources/${s.resource}.pdf#toolbar=1&zoom=80#view=FitBH`;
     audio.src = `resources/${s.resource}.mp3`;
     audio.currentTime = 0;
 
@@ -290,7 +319,10 @@ mobileToggle.onclick = () => {
     youtubeLinkEl.textContent = s.youtube;
     youtubeLinkEl.href = s.youtube;
 
-    audio.play().catch(() => {});
+	const autoplayToggle = document.getElementById('autoplayToggle');
+
+	if ( autoplayToggle.checked )
+		audio.play().catch(() => {});
   }
 
 //  buildSongList(songListEl);
